@@ -1,0 +1,35 @@
+import os
+import requests
+
+
+class YaUploader:
+    def __init__(self, token: str):
+        self.token = token
+
+    def get_heaters(self):
+        return {
+            'Content-type': 'application/json',
+            'Authorization': f'OAuth {self.token}'
+        }
+
+    def get_upload_link(self, disk_file_path):
+        upload_url = 'https://cloud-api.yandex.net/v1/disk/resourses/upload'
+        headers = self.get_heaters()
+        params = {"path": disk_file_path, "overwrite": "true"}
+        response = requests.get(url=upload_url, headers=headers, params=params)
+        return response.json()
+
+    def upload(self, file_path: str):
+        """Метод загружает файлы по списку file_list на яндекс диск"""
+        href_response = self.get_upload_link(disk_file_path=path_to_file)
+        href = href_response.get("href", "")
+        response = requests.put(url=href, data=open(file_path, 'rb'))
+        # Функция может ничего не возвращать
+
+
+if __name__ == '__main__':
+    # Получить путь к загружаемому файлу и токен от пользователя
+    path_to_file = os.path.abspath('TestNetology.py')  # /Users/aleksanderpecherskiy/PycharmProjects/Netology/Requests/TestNetology.py
+    token = ''
+    uploader = YaUploader(token)
+    result = uploader.upload(path_to_file)
