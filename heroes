@@ -1,0 +1,30 @@
+import requests
+
+
+def super_heroes():
+    url = 'https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/all.json'
+    response = requests.get(url=url)
+    return response.json()
+
+
+def heroes():
+    super_hero = []
+    for item in super_heroes():
+        if item['name'] == 'Thanos' or item['name'] == 'Captain America' or item['name'] == 'Hulk':
+            super_hero.append({
+                'name': item['name'],
+                'intelligence': item['powerstats']['intelligence']
+           })
+
+    intelligence_max = 0
+    name = ''
+    for i in super_hero:
+        if i['intelligence'] > intelligence_max:
+            intelligence_max = int(i['intelligence'])
+            name = i['name']
+
+    print(f'Самый умный герой {name}, уровень интеллекта {intelligence_max}')
+
+
+if __name__ == '__main__':
+    heroes()
